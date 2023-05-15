@@ -20,3 +20,13 @@
     "error": "<string|undefined> if failed then error message"
 }
 ```
+
+3. What is MongoDB?
+    - NoSQL
+    - Key Value Pair
+    - Document based database
+    - MongoDB Compass
+
+4. MongoDB Setup
+    - Using Free version of Atlas
+    - Setting up with NodeJS project using express and mongodb driver
