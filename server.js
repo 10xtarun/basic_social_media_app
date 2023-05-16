@@ -1,26 +1,16 @@
-const express = require("express")
-const mongodb = require("mongodb")
-const routes = require("./routes")
-const constants = require("./local-constants")
+const express           = require("express")
+const routes            = require("./routes")
+const connectToDatabase = require("./configs/db")
 
 // initialize express app
 const app = express()
 
 // connect to the database
-const dbClient = new mongodb.MongoClient(constants.mongoURL)
+connectToDatabase()
 
-dbClient.connect()
-.then((client) => {
-    const db = client.db("sm_app")
-
-    console.log("Database connection established and connected to db: ", db.databaseName)
-})
-.catch((error) => {
-    console.log("Database connection failed due to error: ", error)
-    process.exit(0)
-})
-
-
+// add middlewares
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // test/greetings API at root level
 app.get("/", (req, res) => {

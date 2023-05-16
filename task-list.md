@@ -29,4 +29,10 @@
 
 4. MongoDB Setup
     - Using Free version of Atlas
-    - Setting up with NodeJS project using express and mongodb driver
+    - Setting up with NodeJS project using express and mongoose ODM
+    - Get all posts and create a post using mongoose client
+
+5. Mongoose Schema
+    - Create post schema 
+    - apply all the CRUD operations using Schema
+
