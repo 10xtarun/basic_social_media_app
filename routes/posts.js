@@ -1,11 +1,11 @@
 const router = require("express").Router()
 const mongoose = require("mongoose")
+const Post = require("../models/posts")
 
 router.route("/")
     // Get all posts
     .get((req, res) => {
-        return mongoose.connection.db.collection("post")
-            .find().toArray()
+        return Post.find({})
             .then(data =>
                 res
                     .status(200)
@@ -30,25 +30,24 @@ router.route("/")
         const body = req.body
         console.log("body: ", body)
 
-        return mongoose.connection.db.collection("post")
-            .insertOne({ ...body })
-            .then((doc) =>
-                res
+        return Post.create(body)
+            .then((doc) => {
+                return res
                     .status(201)
                     .json({
                         message: "Post created successfully.",
                         data: doc
                     })
-            )
-            .catch((error) =>
-                res
+            })
+            .catch((error) => {
+                return res
                     .status(422)
                     .json({
                         message: "Post creation failed.",
                         data: {},
                         error: error.message ? error.message : error.toString()
                     })
-            )
+            })
     })
 
 
@@ -56,13 +55,23 @@ router.route("/:uid")
     // Get single post
     .get((req, res) => {
         const uid = req.params.uid
-        console.log("params: uid ", uid)
-
-        res
-            .status(200)
-            .json({
-                message: "Post fetched successfully.",
-                data: {}
+        return Post.findOne({ uid })
+            .then((doc) => {
+                return res
+                    .status(200)
+                    .json({
+                        message: "Post fetched successfully.",
+                        data: doc
+                    })
+            })
+            .catch((error) => {
+                return res
+                    .status(422)
+                    .json({
+                        message: "Post fetch failed.",
+                        data: {},
+                        error: error.message ? error.message : error.toString()
+                    })
             })
     })
     // Update a post
@@ -70,27 +79,50 @@ router.route("/:uid")
         const uid = req.params.uid
         const body = req.body
 
-        console.log("params: uid ", uid)
-        console.log("body: ", body)
-
-        res
+        
+        return Post.findOneAndUpdate({ uid }, { $set: body }, { new: true })
+        .then((doc) => {
+            return res
             .status(201)
             .json({
                 message: "Post updated successfully.",
-                data: body
+                data: doc
             })
+        })
+        .catch((error) => {
+            return res
+            .status(422)
+            .json({
+                message: "Post updation failed.",
+                data: {},
+                error: error.message ? error.message : error.toString()
+            })
+        })
     })
     // Delete a post
     .delete((req, res) => {
         const uid = req.params.uid
         console.log("params: uid ", uid)
 
-        res
+        return Post.findOneAndDelete({ uid })
+        .then((doc) => {
+            return res
             .status(200)
             .json({
                 message: "Post deleted successfully.",
-                data: {}
+                data: doc
             })
+        })
+        .catch((error) => {
+            return res
+            .status(422)
+            .json({
+                message: "Post deletion failed.",
+                data: {},
+                error: error.message ? error.message : error.toString()
+            })
+        })
+        
     })
 
 
