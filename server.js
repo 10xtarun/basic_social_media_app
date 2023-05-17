@@ -1,8 +1,19 @@
 const express = require("express")
+const mongoose = require("mongoose")
 const router = require("./routes/index")
+const constants = require("./local-constants")
 
 // initialize the express app
 const app = express()
+
+// database connection setup
+mongoose.connect(constants.mongo_uri, {})
+.then((client) => {
+    console.log("Database connection established and database name is : ", client.connection.db.databaseName)
+})
+.catch((error) => {
+    console.log("Database connection failed and error is : ", error)
+})
 
 // add middlewares
 app.use(express.json())
