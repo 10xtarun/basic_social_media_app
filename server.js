@@ -1,36 +1,36 @@
-const express = require("express")
-const mongoose = require("mongoose")
-const router = require("./routes/index")
-const constants = require("./local-constants")
+const express = require("express");
+const routes = require("./routes");
+const connectToDatabase = require("./configs/db");
+const errorHandler = require("./middlewares/errorHandler");
 
-// initialize the express app
-const app = express()
+// initialize express app
+const app = express();
 
-// database connection setup
-mongoose.connect(constants.mongo_uri, {})
-.then((client) => {
-    console.log("Database connection established and database name is : ", client.connection.db.databaseName)
-})
-.catch((error) => {
-    console.log("Database connection failed and error is : ", error)
-})
+// connect to the database
+connectToDatabase();
 
 // add middlewares
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// basic API route
+// test/greetings API at root level
 app.get("/", (req, res) => {
-    return res.send("Greetings from social media app server.")
-})
+  res.send("Greetings from your social media app server.");
+});
 
-// add all the routes here
-app.use("/posts", router.postRouter)
+// include other Routes
+app.use("/posts", routes.postRouter);
+app.use("/users", routes.userRouter);
 
-// run the server on port number
+app.use(errorHandler);
+
+// server's port
 app.listen(8000, (error) => {
-    if(error) {
-        console.log("Server unable to start, due to error: ", error)
-    }
-    console.log("Server is running on port number 8000.")
-})
+  if (error) {
+  // if server is not starting then log the error
+    // eslint-disable-next-line no-console
+    console.log("Server unable to start: ", error);
+  }
+  // eslint-disable-next-line no-console
+  console.log("Server is running on port 8000.");
+});

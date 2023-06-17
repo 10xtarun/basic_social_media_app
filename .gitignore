@@ -1,5 +1,5 @@
-node_modules
-package-lock.json
+chapter_1.md
 local-constants.js
 
-local-task-list.md
+node_modules
+package-lock.json
