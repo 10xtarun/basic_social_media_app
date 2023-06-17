@@ -1,6 +1,7 @@
 const express           = require("express")
 const routes            = require("./routes")
 const connectToDatabase = require("./configs/db")
+const errorHandler = require("./middlewares/errorHandler")
 
 // initialize express app
 const app = express()
@@ -20,6 +21,8 @@ app.get("/", (req, res) => {
 // include other Routes
 app.use("/posts", routes.postRouter)
 app.use("/users", routes.userRouter)
+
+app.use(errorHandler)
 
 // server's port
 app.listen(8000, (error) => {
