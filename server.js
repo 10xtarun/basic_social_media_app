@@ -1,7 +1,12 @@
 const express = require("express");
+const dotenv = require("dotenv");
 const routes = require("./routes");
 const connectToDatabase = require("./configs/db");
 const errorHandler = require("./middlewares/errorHandler");
+
+dotenv.config({
+  path: `.${process.env.NODE_ENV}.env`,
+});
 
 // initialize express app
 const app = express();
