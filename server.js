@@ -1,34 +1,36 @@
-const express           = require("express")
-const routes            = require("./routes")
-const connectToDatabase = require("./configs/db")
-const errorHandler = require("./middlewares/errorHandler")
+const express = require("express");
+const routes = require("./routes");
+const connectToDatabase = require("./configs/db");
+const errorHandler = require("./middlewares/errorHandler");
 
 // initialize express app
-const app = express()
+const app = express();
 
 // connect to the database
-connectToDatabase()
+connectToDatabase();
 
 // add middlewares
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // test/greetings API at root level
 app.get("/", (req, res) => {
-    res.send("Greetings from your social media app server.")
-})
+  res.send("Greetings from your social media app server.");
+});
 
 // include other Routes
-app.use("/posts", routes.postRouter)
-app.use("/users", routes.userRouter)
+app.use("/posts", routes.postRouter);
+app.use("/users", routes.userRouter);
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 // server's port
 app.listen(8000, (error) => {
-    if (error)
-        // if server is not starting then log the error
-        console.log("Server unable to start: ", error)
-
-    console.log("Server is running on port 8000.")
-})
+  if (error) {
+  // if server is not starting then log the error
+    // eslint-disable-next-line no-console
+    console.log("Server unable to start: ", error);
+  }
+  // eslint-disable-next-line no-console
+  console.log("Server is running on port 8000.");
+});

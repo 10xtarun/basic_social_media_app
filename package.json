@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "start:dev": "nodemon server.js"
+    "start:dev": "nodemon server.js",
+    "lint": "./node_modules/.bin/eslint .",
+    "lint:fix": "./node_modules/.bin/eslint . --fix"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -9,6 +11,8 @@
     "mongoose": "^7.1.1"
   },
   "devDependencies": {
+    "eslint": "^8.43.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "nodemon": "^2.0.22"
   }
 }
