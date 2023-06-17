@@ -1,37 +1,50 @@
 const express = require("express")
 const mongoose = require("mongoose")
+const postModel = require("../models/posts")
 
 const router = express.Router()
 
 router.get("/", (req, res) => {
-
-    mongoose.connection.db.collection("posts")
-        .find()
-        .toArray()
-        .then((documents) => {
-            return res.status(200)
+    postModel.find()
+    .then((documents) => {
+        return res.status(200)
                 .json({
                     message: "Posts fetched successfully.",
                     data: documents,
                     error: null,
                 })
-        })
+    })
+    .catch((error) => {
+        return res.status(422)
+                    .json({
+                        message: "Posts fetch failed.",
+                        data: {},
+                        error: error.message ? error.message : error.toString(),
+                    })
+    })
 })
 
 router.post("/", (req, res) => {
     const body = req.body
     console.log(" post body: ", body)
 
-    mongoose.connection.db.collection("posts")
-        .insertOne(body)
-        .then((document) => {
-            return res.status(201)
-                .json({
-                    message: "Post created successfully.",
-                    data: document,
-                    error: null,
-                })
-        })
+    postModel.create(body)
+    .then((document) => {
+        return res.status(201)
+                    .json({
+                        message: "Post created successfully.",
+                        data: document,
+                        error: null,
+                    })
+    })
+    .catch((error) => {
+        return res.status(422)
+                    .json({
+                        message: "Post creation failed.",
+                        data: {},
+                        error: error.message ? error.message : error.toString(),
+                    })
+    })
 })
 
 router.put("/:uid", (req, res) => {
