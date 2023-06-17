@@ -1,5 +1,7 @@
 const mongoose = require("mongoose")
+const bcrypt = require("bcrypt")
 const { randomSecureKey } = require("../utils")
+const { saltRounds } = require("../local-constants")
 
 const schema = new mongoose.Schema({
     uid: {
@@ -36,6 +38,13 @@ const schema = new mongoose.Schema({
 //     { email: 1, username: 1 },
 //     { unique: true, background: true }
 // )
+
+schema.pre("save", function(){
+    return bcrypt.hash(this.password, saltRounds)
+    .then(hash => {
+        this.password = hash
+    })
+})
 
 const usersModel = mongoose.model("user", schema)
 module.exports = usersModel
