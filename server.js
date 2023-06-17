@@ -19,6 +19,7 @@ app.get("/", (req, res) => {
 
 // include other Routes
 app.use("/posts", routes.postRouter)
+app.use("/users", routes.userRouter)
 
 // server's port
 app.listen(8000, (error) => {

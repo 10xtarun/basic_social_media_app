@@ -1,8 +1,8 @@
 const mongoose = require("mongoose")
-const { mongoURL } = require("../local-constants")
+const { mongo_uri } = require("../local-constants")
 
 module.exports = () => {
-    mongoose.connect(mongoURL)
+    mongoose.connect(mongo_uri)
     .then((client) => {
         const db = client.connection.db
         console.log("Database connection established and connected to db: ", db.databaseName)
