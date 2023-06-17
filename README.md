@@ -154,6 +154,7 @@ Here we are going to rely on database features for searching, sorting and filter
 ### Setup
 1. IDE - VS Code
 2. NodeJS Version 16.13.2
+3. ESLint - [Airbnb Base Rule](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base)
 
 
 
