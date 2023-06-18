@@ -32,7 +32,7 @@ app.use(errorHandler);
 // server's port
 app.listen(process.env.PORT, (error) => {
   // eslint-disable-next-line no-console
-  console.log(`Server is running in ${process.env.NODE_ENV} environment.`)
+  console.log(`Server is running in ${process.env.NODE_ENV} environment.`);
   if (error) {
   // if server is not starting then log the error
     // eslint-disable-next-line no-console

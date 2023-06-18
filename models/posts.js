@@ -1,22 +1,24 @@
 const mongoose = require("mongoose");
+const { randomSecureKey } = require("../utils");
 
 const postSchema = new mongoose.Schema(
   {
     uid: {
       type: String,
-      required: true,
-      unique: true,
+      // required: true,
+      // unique: true,
+      default: randomSecureKey(),
     },
     caption: {
       type: String,
     },
     image_url: {
       type: String,
-      required: true,
+      // required: true,
     },
     user_id: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   {

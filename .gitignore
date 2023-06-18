@@ -8,3 +8,5 @@ package-lock.json
 .local.env
 .test.env
 firebase-admin-service-key.json
+
+constants.js
