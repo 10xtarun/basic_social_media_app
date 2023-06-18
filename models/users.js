@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { randomSecureKey } = require("../utils");
-const { saltRounds } = require("../local-constants");
 
 const schema = new mongoose.Schema({
   uid: {
@@ -41,7 +40,7 @@ const schema = new mongoose.Schema({
 
 // eslint-disable-next-line func-names
 schema.pre("save", function () {
-  return bcrypt.hash(this.password, saltRounds)
+  return bcrypt.hash(this.password, process.env.SALT_ROUNDS)
     .then((hash) => {
       this.password = hash;
     });
