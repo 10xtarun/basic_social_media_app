@@ -6,3 +6,6 @@ package-lock.json
 
 .env
 .local.env
+
+# firebase admin service key
+firebase-admin-service-key.json

@@ -1,8 +1,15 @@
 const router = require("express").Router();
+const multer = require("multer");
 const Post = require("../models/posts");
 
+const FirebaseAdmin = require("../utils/firebase");
+
+// setup object storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage }).single("file");
+
 router.route("/")
-// Get all posts
+  // Get all posts
   .get((req, res) => Post.find({})
     .then((data) => res
       .status(200)
@@ -17,28 +24,59 @@ router.route("/")
         data: {},
         error: error.message ? error.message : error.toString(),
       })))
-// Create a posts
-  .post((req, res) => {
-    const { body } = req;
+  // Create a posts
+  .post(
+    upload,
+    (req, res) => {
+      const { body } = req;
+      const bucket = FirebaseAdmin.storage().bucket();
 
-    return Post.create(body)
-      .then((doc) => res
-        .status(201)
-        .json({
-          message: "Post created successfully.",
-          data: doc,
-        }))
-      .catch((error) => res
-        .status(422)
-        .json({
-          message: "Post creation failed.",
-          data: {},
-          error: error.message ? error.message : error.toString(),
-        }));
-  });
+      Promise.resolve()
+        .then(() => {
+          const { file } = req;
+
+          const blob = bucket.file(file.originalname);
+
+          const blobWriter = blob.createWriteStream({
+            metadata: {
+              contentType: file.mimetype,
+            },
+          });
+
+          blobWriter.on("error", (err) => { throw err; });
+
+          blobWriter.on("finish", () => {
+
+          });
+
+          blobWriter.end(file.buffer);
+
+          return blob.getSignedUrl({ action: "read", expires: "12-31-2099" });
+        })
+        .then((signeURL) => {
+          // eslint-disable-next-line prefer-destructuring
+          body.image_url = signeURL[0];
+
+          return Post.create(body);
+        })
+        .then((doc) => res
+          .status(201)
+          .json({
+            message: "Post created successfully.",
+            data: doc,
+          }))
+        .catch((error) => res
+          .status(422)
+          .json({
+            message: "Post creation failed.",
+            data: {},
+            error: error.message ? error.message : error.toString(),
+          }));
+    },
+  );
 
 router.route("/:uid")
-// Get single post
+  // Get single post
   .get((req, res) => {
     const { uid } = req.params;
     return Post.findOne({ uid })
@@ -56,7 +94,7 @@ router.route("/:uid")
           error: error.message ? error.message : error.toString(),
         }));
   })
-// Update a post
+  // Update a post
   .put((req, res) => {
     const { uid } = req.params;
     const { body } = req;
@@ -76,7 +114,7 @@ router.route("/:uid")
           error: error.message ? error.message : error.toString(),
         }));
   })
-// Delete a post
+  // Delete a post
   .delete((req, res) => {
     const { uid } = req.params;
 
