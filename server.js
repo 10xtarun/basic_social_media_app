@@ -1,7 +1,12 @@
 const express = require("express");
 const routes = require("./routes");
+const dotenv = require("dotenv");
 const connectToDatabase = require("./configs/db");
 const errorHandler = require("./middlewares/errorHandler");
+
+dotenv.config({
+  path: process.env.NODE_ENV === "prod" ? ".env" : `.${process.env.NODE_ENV}.env`,
+});
 
 // initialize express app
 const app = express();
@@ -25,12 +30,14 @@ app.use("/users", routes.userRouter);
 app.use(errorHandler);
 
 // server's port
-app.listen(8000, (error) => {
+app.listen(process.env.PORT, (error) => {
+  // eslint-disable-next-line no-console
+  console.log(`Server is running in ${process.env.NODE_ENV} environment.`)
   if (error) {
   // if server is not starting then log the error
     // eslint-disable-next-line no-console
     console.log("Server unable to start: ", error);
   }
   // eslint-disable-next-line no-console
-  console.log("Server is running on port 8000.");
+  console.log("Server is running on port ", process.env.PORT);
 });

@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const { mongoURI } = require("../local-constants");
+// const { mongoURI } = require("../local-constants");
 
 module.exports = () => {
-  mongoose.connect(mongoURI)
+  mongoose.connect(process.env.MONGO_URI)
     .then((client) => {
       const { db } = client.connection;
       // eslint-disable-next-line no-console

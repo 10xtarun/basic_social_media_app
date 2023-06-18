@@ -3,3 +3,8 @@ local-constants.js
 
 node_modules
 package-lock.json
+
+.env
+.local.env
+.test.env
+firebase-admin-service-key.json
