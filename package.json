@@ -2,7 +2,9 @@
   "scripts": {
     "start:dev": "export NODE_ENV=local && nodemon server.js",
     "lint": "./node_modules/.bin/eslint .",
-    "lint:fix": "./node_modules/.bin/eslint . --fix"
+    "lint:fix": "./node_modules/.bin/eslint . --fix",
+    "test": "export NODE_ENV=test && ./node_modules/mocha/bin/mocha.js --exit ./tests/**/*.test.js",
+    "test:cov": "export NODE_ENV=test && nyc --reporter html --reporter text -t coverage ./node_modules/mocha/bin/mocha.js --exit ./tests/**/*.test.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -14,9 +16,13 @@
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
     "eslint": "^8.43.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "nodemon": "^2.0.22"
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.22",
+    "nyc": "^15.1.0",
+    "supertest": "^6.3.3"
   },
   "type": "commonjs"
 }

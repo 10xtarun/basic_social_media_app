@@ -10,3 +10,7 @@ package-lock.json
 
 # firebase admin service key
 firebase-admin-service-key.json
+
+# test coverage
+.nyc_output
+coverage
