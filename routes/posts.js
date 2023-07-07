@@ -42,12 +42,9 @@ router.route("/")
               contentType: file.mimetype,
             },
           });
-
           blobWriter.on("error", (err) => { throw err; });
 
-          blobWriter.on("finish", () => {
-
-          });
+          blobWriter.on("finish", () => {});
 
           blobWriter.end(file.buffer);
 
