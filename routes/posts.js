@@ -3,34 +3,22 @@ const Post = require("../models/posts");
 const APIError = require("../utils/ApirError");
 const upload = require("../middlewares/uploader");
 const FirebaseAdmin = require("../utils/firebase");
+const controller = require("../controllers/posts");
 
 router.route("/")
   // Get all posts
-  .get((req, res) => Post.find({})
-    .then((data) => res
-      .status(200)
-      .json({
-        message: "Posts fetched successfully.",
-        data,
-      }))
-    .catch((error) => res
-      .status(422)
-      .json({
-        message: "Posts fetch failed.",
-        data: {},
-        error: error.message ? error.message : error.toString(),
-      })))
+  .get(controller.getAllPosts)
   // Create a posts
   .post(
     upload,
     (req, res, next) => {
       const { body, file } = req;
-
+      let blob;
       return Promise.resolve()
         .then(() => {
           const bucket = FirebaseAdmin.storage().bucket();
 
-          const blob = bucket.file(file.originalname);
+          blob = bucket.file(file.originalname);
 
           const blobWriter = blob.createWriteStream({
             metadata: {
@@ -42,10 +30,9 @@ router.route("/")
 
           blobWriter.on("finish", () => { });
 
-          blobWriter.end(file.buffer);
-
-          return blob.getSignedUrl({ action: "read", expires: "12-31-2099" });
+          return blobWriter.end(file.buffer);
         })
+        .then(() => blob.getSignedUrl({ action: "read", expires: "12-31-2099" }))
         .then((signedURL) => {
           // eslint-disable-next-line prefer-destructuring
           body.image_url = signedURL[0];

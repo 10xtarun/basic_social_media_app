@@ -10,3 +10,6 @@ package-lock.json
 firebase-admin-service-key.json
 
 constants.js
+
+.nyc_output
+coverage
